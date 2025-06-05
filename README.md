@@ -1,7 +1,4 @@
 
----
-
-````markdown
 # 🌳 towardTreeEquity
 
 **a reproducible R-based data mart for machine learning analysis of tree 
@@ -49,15 +46,6 @@ tools
 this project uses [`renv`](https://rstudio.github.io/renv/) for dependency 
 management and is organized for modularity and collaboration.
 
-```r
-# clone the repository
-git clone https://github.com/YOUR_USERNAME/towardTreeEquity.git
-cd towardTreeEquity
-
-# open in RStudio and restore the renv environment
-renv::restore()
-````
-
 ---
 
 ## 📁 directory structure
@@ -87,12 +75,12 @@ pipelines, spatial joins, ML experiments) via issues or pull requests.
 
 ## 💌 contact
 
-lead: \[Your Name] — *data justice, collective infrastructure, and 
+lead: \Kalli A. Hale — *data justice, collective infrastructure, and 
 tree-loving tendencies*
 questions, proposals, or data drop-offs? open an issue or email: 
-`your.email@domain.org`
+`KalliAnn.Hale@gmail.com`
 
 ---
 
-## ✨ citation
+## ✨ citations
 
