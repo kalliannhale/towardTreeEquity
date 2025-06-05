@@ -26,6 +26,20 @@ neighborhood-level data storytelling
 
 ## 🧬 project architecture
 
+___
+
+| layer             | contents                                           | used for                                            |
+| ----------------- | -------------------------------------------------- | --------------------------------------------------- |
+| `tree_canopy`     | municipal trees, species, planting date, condition | urban forestry, biodiversity, planting strategy     |
+| `demographics`    | ACS, EJ screeners, redlining overlays              | social vulnerability, gentrification, disinvestment |
+| `infrastructure`  | zoning, parcel data, flood risk, heat surfaces     | climate resilience, planning, infrastructure audits |
+| `air_quality`     | local monitors, EPA AQS, satellite NO₂/PM2.5       | pollution mapping, asthma clusters                  |
+| `econ_layers`     | property values, tax assessments, green jobs       | economic justice, displacement, green economy       |
+| `health`          | hospitalization rates, chronic illness maps        | public health inequities                            |
+| `climate_metrics` | urban heat islands, canopy % by tract              | adaptation, heat resilience                         |
+
+___
+
 This repo supports a multi-phase initiative:
 
 1. **Data Mart Construction**
@@ -40,17 +54,6 @@ tools
 3. **Interactive Dashboard**
    - visualize spatial equity gaps and green infrastructure resilience
    - support ML-driven insights on intervention priorities
-   
-
-| layer             | contents                                           | used for                                            |
-| ----------------- | -------------------------------------------------- | --------------------------------------------------- |
-| `tree_canopy`     | municipal trees, species, planting date, condition | urban forestry, biodiversity, planting strategy     |
-| `demographics`    | ACS, EJ screeners, redlining overlays              | social vulnerability, gentrification, disinvestment |
-| `infrastructure`  | zoning, parcel data, flood risk, heat surfaces     | climate resilience, planning, infrastructure audits |
-| `air_quality`     | local monitors, EPA AQS, satellite NO₂/PM2.5       | pollution mapping, asthma clusters                  |
-| `econ_layers`     | property values, tax assessments, green jobs       | economic justice, displacement, green economy       |
-| `health`          | hospitalization rates, chronic illness maps        | public health inequities                            |
-| `climate_metrics` | urban heat islands, canopy % by tract              | adaptation, heat resilience                         |
 
 ---
 
