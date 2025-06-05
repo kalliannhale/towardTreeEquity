@@ -5,6 +5,8 @@
 that harmonizes foundational datasets and makes them queryable, 
 so team members can build their own modular research modules on top of it.**
 
+
+
 ---
 
 ## 🌱 overview
@@ -24,13 +26,6 @@ neighborhood-level data storytelling
 
 ## 🧬 project architecture
 
-this repo supports a multi-phase initiative:
-
-1. **Data Mart Construction**
-   - unify municipal tree data, census layers, environmental indices, and 
-zoning/flood overlays
-   - prepare geospatial joins and block-level summaries
-
 | layer             | contents                                           | used for                                            |
 | ----------------- | -------------------------------------------------- | --------------------------------------------------- |
 | `tree_canopy`     | municipal trees, species, planting date, condition | urban forestry, biodiversity, planting strategy     |
@@ -40,6 +35,13 @@ zoning/flood overlays
 | `econ_layers`     | property values, tax assessments, green jobs       | economic justice, displacement, green economy       |
 | `health`          | hospitalization rates, chronic illness maps        | public health inequities                            |
 | `climate_metrics` | urban heat islands, canopy % by tract              | adaptation, heat resilience                         |
+
+This repo supports a multi-phase initiative:
+
+1. **Data Mart Construction**
+   - unify municipal tree data, census layers, environmental indices, and 
+zoning/flood overlays
+   - prepare geospatial joins and block-level summaries
 
 
 2. **Operational Community Database**
