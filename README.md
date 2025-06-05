@@ -26,6 +26,22 @@ neighborhood-level data storytelling
 
 ## 🧬 project architecture
 
+This repo supports a multi-phase initiative:
+
+1. **Data Mart Construction**
+   - unify municipal tree data, census layers, environmental indices, and 
+zoning/flood overlays
+   - prepare geospatial joins and block-level summaries
+
+2. **Operational Community Database**
+   - format outputs for use by community organizers and citizen-science 
+tools
+
+3. **Interactive Dashboard**
+   - visualize spatial equity gaps and green infrastructure resilience
+   - support ML-driven insights on intervention priorities
+   
+
 | layer             | contents                                           | used for                                            |
 | ----------------- | -------------------------------------------------- | --------------------------------------------------- |
 | `tree_canopy`     | municipal trees, species, planting date, condition | urban forestry, biodiversity, planting strategy     |
@@ -35,22 +51,6 @@ neighborhood-level data storytelling
 | `econ_layers`     | property values, tax assessments, green jobs       | economic justice, displacement, green economy       |
 | `health`          | hospitalization rates, chronic illness maps        | public health inequities                            |
 | `climate_metrics` | urban heat islands, canopy % by tract              | adaptation, heat resilience                         |
-
-This repo supports a multi-phase initiative:
-
-1. **Data Mart Construction**
-   - unify municipal tree data, census layers, environmental indices, and 
-zoning/flood overlays
-   - prepare geospatial joins and block-level summaries
-
-
-2. **Operational Community Database**
-   - format outputs for use by community organizers and citizen-science 
-tools
-
-3. **Interactive Dashboard**
-   - visualize spatial equity gaps and green infrastructure resilience
-   - support ML-driven insights on intervention priorities
 
 ---
 
