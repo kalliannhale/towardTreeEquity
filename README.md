@@ -1,9 +1,9 @@
 
 # 🌳 towardTreeEquity
 
-**a reproducible R-based data mart for machine learning analysis of tree 
-equity, climate-resilient green infrastructure, and municipal data 
-verification.**
+**the towardTreeEquity package is a flexible spatial and statistical scaffold 
+that harmonizes foundational datasets and makes them queryable, 
+so team members can build their own modular research modules on top of it.**
 
 ---
 
