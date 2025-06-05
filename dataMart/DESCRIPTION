@@ -1,0 +1,17 @@
+Package: dataMart
+Title: towardTreeEquity - dataMart
+Version: 0.0.0.9000
+Authors@R: 
+    person("Kalli", "Hale", , "KalliAnn.Hale@gmail.com", role = c("aut", "cre"))
+Description: Provides modular tools for loading, processing, and serving
+    municipal tree data for use in equity-focused, climate-resilient green
+    infrastructure analysis. Built to support community-led data
+    pipelines, operational dashboards, and field-level data verification
+    efforts.
+License: MIT + file LICENSE
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.3.2
+Imports: 
+    dplyr,
+    sf
