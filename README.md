@@ -73,7 +73,7 @@ pipelines, spatial joins, ML experiments) via issues or pull requests.
 
 ---
 
-## 💌 please join us! contact:
+## 💌 to join, contact:
 
 lead: \Kalli A. Hale — *data justice, collective infrastructure, and 
 tree-loving tendencies*
