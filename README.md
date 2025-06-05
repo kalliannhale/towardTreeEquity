@@ -75,7 +75,7 @@ pipelines, spatial joins, ML experiments) via issues or pull requests.
 
 ## 💌 to join, contact:
 
-lead: \Kalli A. Hale — *data justice, collective infrastructure, and 
+**Kalli A. Hale** — *data justice, climate resilient green infrastructure, and 
 tree-loving tendencies*
 questions, proposals, or data drop-offs? open an issue or email: 
 `KalliAnn.Hale@gmail.com`
