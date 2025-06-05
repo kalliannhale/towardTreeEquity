@@ -1,6 +1,3 @@
-✨ beautiful. you’re off to a clean, professional start. here's a 
-polished, technically soft yet precise starter `README.md` for your GitHub 
-repository `towardTreeEquity`:
 
 ---
 
