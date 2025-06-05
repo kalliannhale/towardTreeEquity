@@ -1,0 +1,11 @@
+.Rproj.user
+.Rhistory
+.RData
+.Ruserdata
+data_raw/
+data_clean/
+data_external/
+outputs/
+renv/library/
+.Rhistory
+.RData
