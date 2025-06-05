@@ -68,15 +68,20 @@ management and is organized for modularity and collaboration.
 
 ```
 towardTreeEquity/
-├── data_raw/        # source datasets (not tracked in git)
-├── data_clean/      # cleaned, transformed data
-├── scripts/         # data wrangling + processing scripts
-├── outputs/         # interim files, figures, and summaries
-├── docs/            # planning notes, references
-├── towardTreeEquity.Rproj
+├── data_raw/          # original datasets (not tracked by git)
+├── data_clean/        # processed/cleaned datasets
+├── data_external/     # partner-provided or supplemental data
+├── scripts/           # data processing + analysis scripts
+│   ├── setup/         # package setup, renv, utils
+│   └── modules/       # team member research modules
+├── outputs/           # maps, figures, tables, .rds
+├── docs/              # proposals, readings, planning notes
+├── dashboard/         # shiny app, Rmds, or viz code
+├── tests/             # validation and test scripts (optional)
+├── .gitignore
 ├── README.md
 ├── renv.lock
-└── .gitignore
+└── towardTreeEquity.Rproj
 ```
 
 ---
