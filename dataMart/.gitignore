@@ -1,1 +1,34 @@
-.Rproj.user
+# RStudio and system files
+.Rhistory
+.RData
+.Rproj.user/
+.Rproj*
+
+# renv cache
+renv/library/
+renv/python/
+renv/staging/
+
+# OS-specific clutter
+.DS_Store
+Thumbs.db
+
+# raw data and large temp files
+data-raw/
+*.log
+*.out
+*.tmp
+*.csv
+*.zip
+*.geojson
+*.shp
+
+# test outputs or build artifacts
+*.pdf
+*.docx
+*.html
+*.png
+
+# python bytecode (if any scripting)
+__pycache__/
+*.pyc
