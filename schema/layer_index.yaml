@@ -1,0 +1,60 @@
+description: >
+  Index of data layers and how they relate to each other. Used to validate joins,
+  automate transformations, and harmonize multi-source spatial datasets.
+
+version: 1.0
+
+anchor_layer: parcel_layer
+
+joinable_layers:
+  - tree_canopy:
+      join_key: parcel_id
+      method: direct
+  - climate_metrics:
+      derived_from: [tree_canopy, parcel_layer]
+      method: model_derivation
+  - air_quality:
+      join_method: nearest_sensor_join
+      reference: parcel centroid
+  - demographics:
+      join_method: spatial_overlay
+      key: block_id
+
+layers:
+  - name: tree_canopy
+    unit: tree
+    primary_key: tree_id
+    linked_to: parcel_id
+    geometry: Point
+    crs: EPSG:4326
+
+  - name: tree_narratives
+    unit: narrative
+    primary_key: ["tree_id", "version"]
+    linked_to: tree_id
+    geometry: null
+
+  - name: demographics
+    unit: census_tract
+    primary_key: tract_id
+    geometry: Polygon
+    crs: EPSG:4326
+
+  - name: infrastructure
+    unit: parcel
+    primary_key: parcel_id
+    geometry: Polygon
+    crs: EPSG:4326
+
+  - name: air_quality
+    unit: sensor_point
+    primary_key: sensor_id
+    geometry: Point
+    crs: EPSG:4326
+
+  - name: climate_metrics
+    unit: parcel
+    primary_key: parcel_id
+    derived_from: [tree_canopy, infrastructure]
+    geometry: Polygon
+    crs: EPSG:4326

@@ -1,0 +1,76 @@
+layer_name: tree_narratives
+description: >
+  A semi-structured layer of community-contributed stories, memories, names, and reflections linked to individual trees or parcels, governed by consent and designed to honor emotional, cultural, and ecological meaning.
+
+unit_of_linkage: tree_id
+
+fields:
+  - name: tree_id
+    type: string
+    required: true
+    description: Canonical ID for the tree this story belongs to.
+
+  - name: contributor_name
+    type: string
+    required: false
+    description: Name or pseudonym of storyteller (can be anonymous).
+
+  - name: contributor_org
+    type: string
+    required: false
+    description: Affiliated org, if submitted via collective activity.
+
+  - name: narrative_text
+    type: string
+    required: true
+    description: Story, reflection, or memory related to this tree.
+
+  - name: tree_name
+    type: string
+    required: false
+    description: Optional name given to the tree.
+
+  - name: planted_on
+    type: date
+    required: false
+    description: Date this tree was planted, if known or remembered.
+
+  - name: planting_day_weather
+    type: string
+    required: false
+    description: Weather memory from planting day ("sunny and breezy").
+
+  - name: hopes_for_future
+    type: string
+    required: false
+    description: Wishes or dreams tied to this tree ("shade for the kids", "last through the century").
+
+  - name: sticker_tags
+    type: list[string]
+    required: false
+    description: Tags like ["memorial", "birthday tree", "healing", "protest"].
+
+  - name: narrative_visibility
+    type: string
+    required: true
+    enum: ["public", "private", "consented-use-only"]
+    default: "consented-use-only"
+
+  - name: consent_status
+    type: boolean
+    required: true
+    description: Whether the contributor has given permission to share and use this narrative.
+
+  - name: narrative_created_at
+    type: datetime
+    required: true
+
+  - name: narrative_updated_at
+    type: datetime
+    required: false
+
+  - name: version
+    type: integer
+    required: false
+    description: Version number, for narrative edits
+

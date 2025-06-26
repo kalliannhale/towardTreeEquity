@@ -1,0 +1,84 @@
+layer_name: parcel_layer
+description: >
+  A harmonized dataset of land parcels, integrating spatial, ecological,
+  economic, and community attributes. This layer is the foundation for
+  joining other layers, conducting parcel-level analysis, and enabling
+  downstream modeling for equity and resilience.
+
+crs: EPSG:4326
+geometry_type: Polygon
+unit_of_analysis: parcel
+version: 1.0
+
+fields:
+  - name: parcel_id
+    type: string
+    required: true
+    description: Unique parcel identifier, typically from municipal assessor.
+
+  - name: address
+    type: string
+    required: false
+    description: Primary address associated with the parcel.
+
+  - name: land_use_type
+    type: string
+    required: false
+    enum: [residential, commercial, public, vacant, mixed, unknown]
+    description: Zoning/land use category for the parcel.
+
+  - name: area_m2
+    type: number
+    required: true
+    description: Area of the parcel in square meters.
+
+  - name: block_id
+    type: string
+    required: false
+    description: Optional spatial join to block-level census data.
+
+  - name: council_district
+    type: string
+    required: false
+    description: Local political district for governance alignment.
+
+  - name: environmental_justice_zone
+    type: boolean
+    required: false
+    description: True if parcel lies in an EJ-designated zone.
+
+  - name: redlined_status
+    type: string
+    enum: [A, B, C, D, unknown]
+    required: false
+    description: Historical HOLC redlining grade, if applicable.
+
+  - name: impervious_surface_pct
+    type: number
+    required: false
+    description: % of parcel covered by impervious surface (e.g., concrete).
+
+  - name: greenspace_access_score
+    type: number
+    required: false
+    description: Composite score of access to green space (0–1).
+
+  - name: tree_count
+    type: integer
+    required: false
+    description: Total number of trees linked to this parcel.
+
+  - name: estimated_cooling_index
+    type: number
+    required: false
+    description: Modeled cooling potential of parcel based on tree canopy and structure.
+
+  - name: cooling_confidence_interval
+    type: string
+    required: false
+    description: e.g., "±0.5°C" — confidence interval on cooling estimate.
+
+  - name: geometry
+    type: geometry (Polygon)
+    required: true
+    description: Polygon geometry of the parcel.
