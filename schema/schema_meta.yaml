@@ -1,14 +1,19 @@
 schema_version: 1.0
+
 created_by: towardTreeEquity team
+
 maintainers:
   - name: Kalli A. Hale
     email: KalliAnn.Hale@gmail.com
+
 description: >
   This folder contains the structural metadata and schema governance logic
   for all datasets used in the towardTreeEquity project. It includes individual
-  layer schemas, cross-schema link logic, and narrative governance rules.
+  layer schemas, cross-schema link logic, machine learning readiness metadata,
+  and narrative governance policies.
 
-modules:
+layers:
+  - parcel_layer
   - tree_canopy
   - demographics
   - infrastructure
@@ -17,6 +22,16 @@ modules:
   - health
   - climate_metrics
   - tree_narratives
-relationships: defined in layer_index.yaml
+
+relationships: schema/layer_index.yaml
 validation_rules: schema/governance/schema_validation_rules.yaml
 narrative_policy: schema/governance/narrative_governance.yaml
+field_tags: schema/governance/field_tagging_system.yaml
+ml_registry: model_registry.yaml
+
+license: CC-BY-4.0
+
+environmental_commitment: >
+  towardTreeEquity is committed to climate-aligned computation, minimizing cloud
+  compute dependencies, designing efficient and interpretable models, and embedding
+  environmental justice values into both the data pipeline and its community usage.

@@ -1,76 +1,94 @@
 layer_name: tree_narratives
 description: >
-  A semi-structured layer of community-contributed stories, memories, names, and reflections linked to individual trees or parcels, governed by consent and designed to honor emotional, cultural, and ecological meaning.
+  A structured layer for holding narrative, cultural, and community memory data associated with individual trees.
+  This includes memorial stories, public hopes, community designations, and symbolic meanings.
+  Narratives are linked to specific `tree_id` values and may carry consent status, attribution, and versioning.
 
-unit_of_linkage: tree_id
+version: 1.0
+geometry_type: Point
+crs: EPSG:4326
+unit: narrative
+primary_key: [tree_id, narrative_version]
+
+linked_to: tree_canopy
+join_key: tree_id
 
 fields:
   - name: tree_id
     type: string
     required: true
-    description: Canonical ID for the tree this story belongs to.
+    field_class: spatial
+
+  - name: narrative_version
+    type: integer
+    required: true
+    field_class: temporal
+    notes: use for revision control
+
+  - name: narrative_field
+    type: string
+    required: true
+    field_class: narrative
+    notes: long-form text; markdown supported
+
+  - name: memorial_tag
+    type: string
+    required: false
+    field_class: categorical
+    notes: e.g. ["memorial", "witness", "dedication"]
 
   - name: contributor_name
     type: string
     required: false
-    description: Name or pseudonym of storyteller (can be anonymous).
+    field_class: narrative
 
   - name: contributor_org
     type: string
     required: false
-    description: Affiliated org, if submitted via collective activity.
+    field_class: narrative
 
-  - name: narrative_text
-    type: string
-    required: true
-    description: Story, reflection, or memory related to this tree.
-
-  - name: tree_name
-    type: string
+  - name: community_priority_score
+    type: number
     required: false
-    description: Optional name given to the tree.
+    field_class: indexed
+    notes: derived from participatory voting or story frequency
 
-  - name: planted_on
+  - name: story_date
     type: date
     required: false
-    description: Date this tree was planted, if known or remembered.
-
-  - name: planting_day_weather
-    type: string
-    required: false
-    description: Weather memory from planting day ("sunny and breezy").
-
-  - name: hopes_for_future
-    type: string
-    required: false
-    description: Wishes or dreams tied to this tree ("shade for the kids", "last through the century").
-
-  - name: sticker_tags
-    type: list[string]
-    required: false
-    description: Tags like ["memorial", "birthday tree", "healing", "protest"].
+    field_class: temporal
 
   - name: narrative_visibility
     type: string
     required: true
-    enum: ["public", "private", "consented-use-only"]
-    default: "consented-use-only"
+    field_class: categorical
+    valid_values: ["public", "private", "conditional"]
 
   - name: consent_status
-    type: boolean
+    type: string
     required: true
-    description: Whether the contributor has given permission to share and use this narrative.
+    field_class: categorical
+    valid_values: ["consented", "withdrawn", "pending"]
+    notes: governed by `narrative_governance.yaml`
 
-  - name: narrative_created_at
-    type: datetime
+  - name: tags
+    type: list[string]
+    required: false
+    field_class: narrative
+    notes: e.g. ["healing", "remembrance", "pollinator"]
+
+  - name: narrative_summary
+    type: string
+    required: false
+    field_class: latent
+    notes: generated via ML or community tagging
+
+  - name: ingestion_date
+    type: date
     required: true
+    field_class: temporal
 
-  - name: narrative_updated_at
-    type: datetime
+  - name: transformation_log
+    type: string
     required: false
-
-  - name: version
-    type: integer
-    required: false
-    description: Version number, for narrative edits
-
+    field_class: derived

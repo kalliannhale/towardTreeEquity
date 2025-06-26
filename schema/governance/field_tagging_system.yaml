@@ -1,0 +1,101 @@
+field_tagging_version: 1.0
+
+description: >
+  Canonical tagging system for all fields used in towardTreeEquity schema layers.
+  Tags help classify variables by mathematical type, derivation logic, and modeling utility.
+  These tags are used in schema validation, modeling workflows, narrative integration,
+  and metadata extraction.
+
+tags:
+  measured:
+    definition: >
+      Fields that represent directly observed or recorded values.
+    example_fields:
+      - dbh_cm
+      - species
+      - planting_date
+    validation_note: source data must be traceable
+
+  derived:
+    definition: >
+      Fields computed from other raw inputs using transformation or formulas.
+    example_fields:
+      - canopy_area_m2
+      - distance_to_building
+      - estimated_lifespan
+    validation_note: must include `derived_from` metadata
+
+  indexed:
+    definition: >
+      Composite scores generated from multi-dimensional inputs, often normalized.
+    example_fields:
+      - cooling_index
+      - EJ_score
+      - UHI_buffer
+    validation_note: should reference scoring model and assumptions
+
+  categorical:
+    definition: >
+      Discrete bins or qualitative categories with finite options.
+    example_fields:
+      - condition
+      - land_use_type
+      - native_status
+    validation_note: should include valid category list
+
+  temporal:
+    definition: >
+      Time-specific fields that enable ordering, versioning, or change detection.
+    example_fields:
+      - last_inspection_date
+      - planted_year
+      - ingestion_date
+    validation_note: standard ISO 8601 format recommended
+
+  spatial:
+    definition: >
+      Geometries or spatially-derived relationships.
+    example_fields:
+      - geometry
+      - buffer_distance
+      - crs
+    validation_note: must match schema-level `geometry_type` and `crs`
+
+  latent:
+    definition: >
+      Inferred fields created through ML or pattern recognition techniques.
+    example_fields:
+      - vulnerability_cluster_id
+      - narrative_summary
+      - tree_vector_embedding
+    validation_note: must include model version and data source
+
+  economic:
+    definition: >
+      Financial outputs or estimates tied to ecological services or labor.
+    example_fields:
+      - cooling_cost_saved
+      - maintenance_cost_est
+      - stormwater_savings
+    validation_note: assumptions must be auditable or referenced
+
+  narrative:
+    definition: >
+      Storytelling, memory, or community-reported context.
+    example_fields:
+      - narrative_field
+      - memorial_tag
+      - contributor_org
+    validation_note: requires `narrative_governance` metadata block
+
+metadata_fields_required_per_tag:
+  derived: [derived_from]
+  latent: [model_tag, source_data]
+  narrative: [consent_status, contributor_org]
+  indexed: [scoring_method, input_dimensions]
+
+model_integration_flags:
+  - model_tag
+  - cv_fold_id
+  - train_test_split_id
+  - evaluation_metric_target

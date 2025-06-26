@@ -1,84 +1,85 @@
 layer_name: parcel_layer
-description: >
-  A harmonized dataset of land parcels, integrating spatial, ecological,
-  economic, and community attributes. This layer is the foundation for
-  joining other layers, conducting parcel-level analysis, and enabling
-  downstream modeling for equity and resilience.
 
-crs: EPSG:4326
-geometry_type: Polygon
-unit_of_analysis: parcel
+description: >
+  Canonical spatial anchor layer representing land parcels. Serves as the
+  unit of analysis for tree joins, climate metrics, cooling index modeling,
+  and multi-scalar spatial equity analysis.
+
 version: 1.0
+geometry_type: Polygon
+crs: EPSG:4326
+primary_key: parcel_id
 
 fields:
   - name: parcel_id
     type: string
     required: true
-    description: Unique parcel identifier, typically from municipal assessor.
-
-  - name: address
-    type: string
-    required: false
-    description: Primary address associated with the parcel.
-
-  - name: land_use_type
-    type: string
-    required: false
-    enum: [residential, commercial, public, vacant, mixed, unknown]
-    description: Zoning/land use category for the parcel.
-
-  - name: area_m2
-    type: number
-    required: true
-    description: Area of the parcel in square meters.
+    field_class: spatial
 
   - name: block_id
     type: string
     required: false
-    description: Optional spatial join to block-level census data.
+    field_class: spatial
 
-  - name: council_district
+  - name: address
     type: string
     required: false
-    description: Local political district for governance alignment.
+    field_class: categorical
 
-  - name: environmental_justice_zone
-    type: boolean
-    required: false
-    description: True if parcel lies in an EJ-designated zone.
-
-  - name: redlined_status
+  - name: land_use_type
     type: string
-    enum: [A, B, C, D, unknown]
     required: false
-    description: Historical HOLC redlining grade, if applicable.
+    field_class: categorical
 
   - name: impervious_surface_pct
     type: number
     required: false
-    description: % of parcel covered by impervious surface (e.g., concrete).
+    field_class: measured
+
+  - name: climate_zone
+    type: string
+    required: false
+    field_class: spatial
+
+  - name: floodplain_status
+    type: string
+    required: false
+    field_class: categorical
 
   - name: greenspace_access_score
     type: number
     required: false
-    description: Composite score of access to green space (0–1).
-
-  - name: tree_count
-    type: integer
-    required: false
-    description: Total number of trees linked to this parcel.
+    field_class: indexed
 
   - name: estimated_cooling_index
     type: number
     required: false
-    description: Modeled cooling potential of parcel based on tree canopy and structure.
+    field_class: indexed
+    derived_from: [tree_canopy, impervious_surface_pct]
+    confidence_interval: true
+    model_tag: cooling_index_model_v1
 
-  - name: cooling_confidence_interval
+  - name: narrative_summary
     type: string
     required: false
-    description: e.g., "±0.5°C" — confidence interval on cooling estimate.
+    field_class: latent
+    derived_from: [tree_narratives]
+    narrative_aggregation: true
 
-  - name: geometry
-    type: geometry (Polygon)
-    required: true
-    description: Polygon geometry of the parcel.
+  - name: last_updated
+    type: date
+    required: false
+    field_class: temporal
+
+governance:
+  schema_validated: true
+  data_provenance:
+    source: "City of Boston Assessing Department"
+    ingestion_date: 2025-06-15
+    transformation_log: cleaned_addresses, standardized CRS
+
+  narrative_integration:
+    includes_summary: true
+    community_consent_required: true
+
+  uncertainty_tracking: true

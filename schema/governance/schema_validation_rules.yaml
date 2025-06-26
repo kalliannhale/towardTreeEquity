@@ -1,0 +1,49 @@
+schema_validation_version: 1.0
+
+description: >
+  Rules and standards for validating layer schema files in the towardTreeEquity project.
+  Each layer must conform to type, governance, provenance, and field tagging expectations.
+
+required_fields:
+  - layer_name
+  - version
+  - geometry_type
+  - crs
+  - primary_key
+  - fields
+
+required_field_attributes:
+  - name
+  - type
+  - required
+  - field_class
+
+accepted_field_classes:
+  - measured
+  - derived
+  - indexed
+  - categorical
+  - temporal
+  - spatial
+  - latent
+  - economic
+
+optional_field_attributes:
+  - derived_from
+  - model_tag
+  - confidence_interval
+  - narrative_consent_required
+  - narrative_aggregation
+
+required_governance_fields:
+  - schema_validated
+  - data_provenance
+  - uncertainty_tracking
+
+governance_checks:
+  - must include `source`, `ingestion_date`, and `transformation_log` under data_provenance
+  - if `narrative_field` exists, `narrative_governance` block must be defined
+
+field_tagging_check_enabled: true
+confidence_interval_check_enabled: true
+cross_layer_validation_enabled: true

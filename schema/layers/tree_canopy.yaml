@@ -1,0 +1,118 @@
+layer_name: tree_canopy
+
+description: >
+  A harmonized, spatial dataset of public tree inventories used for climate
+  resilience, urban biodiversity, environmental justice, and public health research.
+  Trees are linked to parcels and include biophysical, ecological, economic,
+  and narrative features.
+
+version: 1.0
+geometry_type: Point
+crs: EPSG:4326
+primary_key: tree_id
+
+fields:
+  - name: tree_id
+    type: string
+    required: true
+    field_class: categorical
+
+  - name: parcel_id
+    type: string
+    required: true
+    field_class: spatial
+
+  - name: lat
+    type: number
+    required: true
+    field_class: spatial
+
+  - name: lon
+    type: number
+    required: true
+    field_class: spatial
+
+  - name: species
+    type: string
+    required: true
+    field_class: measured
+
+  - name: native_status
+    type: string
+    required: false
+    field_class: categorical
+
+  - name: dbh_cm
+    type: number
+    required: false
+    field_class: measured
+
+  - name: canopy_width_m
+    type: number
+    required: false
+    field_class: derived
+    derived_from: [lidar_data]
+
+  - name: drought_tolerance
+    type: string
+    required: false
+    field_class: categorical
+
+  - name: UHI_buffer
+    type: number
+    required: false
+    field_class: indexed
+    derived_from: [canopy_width_m, parcel_impervious_surface]
+    model_tag: uhi_model_v2
+
+  - name: maintenance_cost_est
+    type: number
+    required: false
+    field_class: economic
+    derived_from: [species, age, labor_rate]
+
+  - name: planted_date
+    type: date
+    required: false
+    field_class: temporal
+
+  - name: condition
+    type: string
+    required: false
+    field_class: categorical
+
+  - name: responsible_entity
+    type: string
+    required: false
+    field_class: categorical
+
+  - name: tree_vector_embedding
+    type: string
+    required: false
+    field_class: latent
+    model_tag: ml_embedding_v1
+
+  - name: community_reported
+    type: boolean
+    required: false
+    field_class: categorical
+
+  - name: narrative_field
+    type: string
+    required: false
+    field_class: latent
+    narrative_consent_required: true
+
+governance:
+  schema_validated: true
+  data_provenance:
+    source: "Boston Urban Forestry Department"
+    ingestion_date: 2025-06-10
+    transformation_log: joined_with_parcels, lidar_canopy_added
+
+  narrative_governance:
+    contributor_org: "Trees for Justice"
+    narrative_visibility: conditional
+    community_consent_status: tracked
+
+  uncertainty_tracking: true
