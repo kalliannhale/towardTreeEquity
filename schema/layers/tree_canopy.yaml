@@ -3,6 +3,7 @@ layer_name: tree_canopy
 description: >
   A harmonized, spatial dataset of public tree inventories used for climate
   resilience, urban biodiversity, environmental justice, and public health research.
+  
   Trees are linked to parcels and include biophysical, ecological, economic,
   and narrative features.
 

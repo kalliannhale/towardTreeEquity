@@ -1,0 +1,96 @@
+registry_version: 1.0
+created_by: towardTreeEquity team
+maintainers:
+  - name: Kalli A. Hale
+    email: KalliAnn.Hale@gmail.com
+
+description: >
+  Registry of statistical and machine learning models used across the
+  towardTreeEquity data infrastructure. Each model entry includes versioning,
+  features used, targets, model artifacts, evaluation metrics, and interpretability notes.
+
+models:
+  - name: parcel_cooling_model
+    version: v2.3
+    trained_by: Kalli A. Hale
+    date_trained: 2025-07-01
+    inference_ready: true
+    tags: ["climate", "infrastructure", "equity"]
+    description: >
+      Predicts parcel-level cooling index based on tree canopy features,
+      built form, surface cover, and neighborhood climate metrics.
+    model_type: gradient_boosting_regressor
+    target_field: cooling_index
+    target_layer: parcel_layer
+    input_features:
+      - name: canopy_area_m2
+        type: derived
+        imputed: false
+        transformation: log
+      - name: biophilic_index
+        type: indexed
+        imputed: true
+        model_used: biophilia_classifier_v1.1
+      - name: distance_to_building
+        type: spatial
+        imputed: false
+      - name: UHI_zone
+        type: categorical
+        encoding: one-hot
+    output_fields:
+      - cooling_index
+      - cooling_confidence_interval
+    model_card_url: docs/models/parcel_cooling_model.md
+    training_data:
+      source_layer: parcel_layer
+      training_filter: has_tree = true
+      date_range: 2019–2023
+      region_validity: Boston metro area
+    evaluation_metrics:
+      RMSE: 0.78
+      R2: 0.87
+    model_file: models/parcel_cooling_model_v2.3.pkl
+    dependencies:
+      - scikit-learn==1.2.0
+      - xgboost==1.7.3
+    temporal_validity: "Valid for years 2018–2025"
+    ethical_notes: >
+      Model does not account for microclimate variations underrepresented in training data.
+      Caution advised when applying outside Boston metro area.
+    recommended_use: >
+      Use for parcel-level cooling estimates in urban planning and climate resilience projects.
+
+  - name: green_labor_predictor
+    version: v1.0
+    trained_by: Green Futures Team
+    date_trained: 2025-06-15
+    inference_ready: false
+    tags: ["labor", "economic", "maintenance"]
+    description: >
+      Predicts labor hour estimates for annual tree maintenance
+      based on structural and ecological features.
+    model_type: linear_regression
+    target_field: labor_hours
+    target_layer: tree_canopy
+    input_features:
+      - name: species
+        type: categorical
+        encoding: label
+      - name: condition
+        type: categorical
+        encoding: ordinal
+      - name: maintenance_history_count
+        type: derived
+        imputed: false
+    evaluation_metrics:
+      MAE: 1.2
+      R2: 0.72
+    model_file: models/green_labor_predictor_v1.0.pkl
+    dependencies:
+      - statsmodels==0.13.5
+    temporal_validity: "Valid for years 2020–2025"
+    region_validity: "Multi-city, pilot stage"
+    ethical_notes: >
+      Early model; may underpredict labor in neighborhoods with intensive green labor programs.
+    recommended_use: >
+      For exploratory labor cost estimation and budgeting support.
