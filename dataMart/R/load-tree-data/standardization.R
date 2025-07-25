@@ -16,3 +16,10 @@ Takes in a file path, API endpoint, or database connection.
 "
 
 pacman::p_load(tidyr, dplyr)
+
+match_fields <- function(source_fields, canonical_fields) {
+  # Use string distance, common abbreviations, semantic similarity
+  # "PID" scores high match with "parcel_id"
+  # "LU" scores high match with "land_use" or "land_use_type"
+}
+

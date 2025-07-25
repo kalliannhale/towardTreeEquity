@@ -30,6 +30,11 @@ fields:
     type: string
     required: false
     field_class: categorical
+    
+  - name: equity_score
+    type: indexed
+    required: false
+    field_class: measured
 
   - name: impervious_surface_pct
     type: number
@@ -72,14 +77,14 @@ fields:
     field_class: temporal
 
 governance:
-  schema_validated: true
+  schema_validated:
   data_provenance:
-    source: "City of Boston Assessing Department"
-    ingestion_date: 2025-06-15
-    transformation_log: cleaned_addresses, standardized CRS
+    source:
+    ingestion_date:
+    transformation_log:
 
   narrative_integration:
-    includes_summary: true
-    community_consent_required: true
+    includes_summary:
+    community_consent_required:
 
-  uncertainty_tracking: true
+  uncertainty_tracking:

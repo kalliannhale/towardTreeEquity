@@ -103,17 +103,26 @@ fields:
     required: false
     field_class: latent
     narrative_consent_required: true
+    
+  - narrative_visibility:
+    type: string
+    required: true
+    default: "private"
+    description: "Controls the visibility of the narrative_field."
+    validation_rules:
+      - rule: "is_in_set"
+        values: ["private", "consented_public", "anonymous_public"]
 
 governance:
-  schema_validated: true
+  schema_validated
   data_provenance:
-    source: "Boston Urban Forestry Department"
-    ingestion_date: 2025-06-10
-    transformation_log: joined_with_parcels, lidar_canopy_added
+    source:
+    ingestion_date:
+    transformation_log:
 
   narrative_governance:
-    contributor_org: "Trees for Justice"
-    narrative_visibility: conditional
-    community_consent_status: tracked
+    contributor_org:
+    narrative_visibility:
+    community_consent_status:
 
-  uncertainty_tracking: true
+  uncertainty_tracking:
