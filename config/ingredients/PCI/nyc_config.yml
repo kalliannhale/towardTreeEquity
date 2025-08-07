@@ -1,0 +1,64 @@
+# ===================================================================
+#   City Configuration for towardTreeEquity
+#   City: New York City - FINAL
+#   Description: This file contains all parameters needed to transform
+#                Bronze data into analysis-ready Silver data for NYC.
+# ===================================================================
+
+project_details:
+  # The canonical CRS for all analysis in the Silver database. EPSG:2263
+  # is the standard for NYC, with units in feet.
+  city_name: "New York City"
+  crs_epsg: 2263
+
+# --- Sensor-Specific Parameters ---
+# Constants needed to process specific remote sensing data products.
+# This avoids hardcoding these values in R scripts.
+sensor_parameters:
+  landsat_8_c2_l2:
+    lst_scale: 0.00341802
+    lst_offset: 149.0
+
+# --- Field Mappings ---
+# This is the "translation dictionary" that maps raw field names from
+# Bronze sources to the canonical field names in our Silver database.
+field_mappings:
+  # Source: parks_nyc_2025 (from sources.yml)
+  # Based on the NYC Parks Properties data dictionary.
+  parks_nyc_2025:
+    source_id: "gispropnum"
+    park_name: "propertyname"
+    borough: "borough"
+    council_district: "councildistrict"
+    zip_code: "zipcode"
+
+  # Source: road_network_lion_2024 (from sources.yml)
+  # NOTE: 'source_id' needs to be the unique identifier for a road segment.
+  road_network_lion_2024:
+    source_id: "SegmentID"  # CRITICAL: Please verify this field name by inspecting the lion.gdb data.
+    road_name: "Street"     # TO CONFIRM
+
+  # Source: land_cover_nyc_2017 (from sources.yml)
+  # This special mapping converts raster pixel values to meaningful labels.
+  land_cover_nyc_2017:
+    class_mapping:
+      1: "Tree Canopy"
+      2: "Grass/Shrubs"
+      3: "Bare Soil"
+      4: "Water"
+      5: "Buildings"
+      6: "Roads"
+      7: "Other Impervious"
+      8: "Railroads"
+
+# --- Analysis Parameters ---
+# These parameters make the scientific methods reproducible and easy to modify.
+analysis_parameters:
+  park_cooling_index:
+    # Buffer distance for the PCI calculation. The transform script will
+    # handle unit conversions from meters to the project's CRS units (feet).
+    buffer_distance_meters: 500
+
+    # Defines which land cover classes are considered "vegetation" for
+    # calculating metrics like NDVIveg. Uses class numbers from the mapping above.
+    land_cover_veg_classes: [1, 2] # (1) Tree Canopy, (2) Grass/Shrubs

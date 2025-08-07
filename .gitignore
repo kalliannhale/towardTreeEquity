@@ -1,11 +1,39 @@
-.Rproj.user
+# ignore sensitive credentials from the config directory
+config/ingredients/secrets.yml
+
+# R session files
 .Rhistory
 .RData
-.Ruserdata
-data_raw/
-data_clean/
-data_external/
-outputs/
+.Rapp.history
+.Rproj.user/
+
+# Environment management
 renv/library/
-.Rhistory
-.RData
+renv/staging/
+renv/python/
+
+# Lock files (optional, if you want collaborators to re-generate exact envs)
+renv.lock
+
+# IDE-specific
+.Rproj.user/
+
+# OS-specific
+.DS_Store
+
+# Logs and temporary data
+*.log
+
+# Other common build/temp
+*.tmp
+*.bak
+
+# Project metadata
+*.Rproj
+
+# ignore raw or large data
+data/bronze/
+
+# ignore all intermediate/generated data
+data/silver/
+data/gold/

@@ -13,7 +13,7 @@ description: >
   and narrative governance policies.
 
 layers:
-  - parcel_layer
+  - parcels
   - tree_canopy
   - demographics
   - infrastructure
