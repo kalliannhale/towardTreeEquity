@@ -182,7 +182,7 @@ for(batch_num in 1:sample_batches) {
 }
 
 total_time <- difftime(Sys.time(), start_time, units = "mins")
-cat(paste("🎉 300-PARK SAMPLE PROCESSING COMPLETE! Total time:", round(total_time, 1), "minutes\n"))
+cat(paste(" 300-PARK SAMPLE PROCESSING COMPLETE! Total time:", round(total_time, 1), "minutes\n"))
 
 # --- VERIFICATION ---
 batch_files <- list.files(output_dir, pattern = "sample_batch_.*\\.rds", full.names = TRUE)
