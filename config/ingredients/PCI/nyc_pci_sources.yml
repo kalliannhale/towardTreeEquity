@@ -1,0 +1,98 @@
+# filename: nyc_pci_sources.yml
+# --------------------------------------------------------------------
+# PROJECT MANIFEST: NYC Park Cooling Index Pilot
+# A user creates this file to run the 'pci' recipe with their specific data for NYC.
+# --------------------------------------------------------------------
+
+project_name: "NYC Park Cooling Index Pilot"
+
+recipe_id: "pci"
+
+sources:
+
+  land_surface_temp:
+    # --- Spatial and Temporal Metadata ---
+    area_of_interest: "nyc"
+    time_period: "2020-2022"
+    source_type: "local" # tells system where data is being uploaded from
+    location: "data/bronze/raster/surfacetemperature_median_2020_2022.tif" # path for finding data
+    source_id: "lst_median_2022"
+    layer_name: "land_surface_temperature"
+    description: "Median Land Surface Temperature (LST) Raster Data"
+    file_format: "GeoTIFF"
+    
+  night_time_light:
+    area_of_interest: "nyc"
+    time_period: "2020-2022"
+    source_type: "local"
+    location: "data/bronze/raster/NYC_NighttimeLights_2020-2022_Median.tif"
+    source_id: "ntl_median_2022"
+    layer_name: "night_time_light"
+    description: "Median Nighttime Light Raster Data"
+    file_format: "GeoTIFF"
+    # No handler needed
+
+  ndvi:
+    area_of_interest: "nyc"
+    time_period: "2020-2022"
+    source_type: "local"
+    location: "data/bronze/raster/NYC_NDVI_2020-2022_Summer_Median.tif"
+    source_id: "ndvi_median_2022"
+    layer_name: "ndvi"
+    description: "Median NDVI Raster Data"
+    file_format: "GeoTIFF"
+    # No handler needed
+
+  park_geometries:
+    area_of_interest: "nyc"
+    time_period: "2025"
+    source_type: "local"
+    # This location is a directory containing a multi-file format (Shapefile).
+    # Your tool should be smart enough to handle a directory as a source.
+    location: "data/bronze/vector/ParkProperties_2025"
+    source_id: "parks_nyc_2025"
+    layer_name: "urban_parks"
+    description: "Polygon properties managed by NYC Parks for geospatial analysis"
+    file_format: "Shapefile"
+    processing:
+      handler: "zip_folder"
+      validation_target: "geo_export_f59d1ffc-ed9b-4275-8c89-9cb8dc88a521.shp"
+      # if needs handler, needs validation_target
+  
+  land_cover:
+    area_of_interest: "nyc"
+    time_period: "2017"
+    source_type: "local"
+    location: "data/bronze/raster/Land_Cover"
+    source_id: "land_cover_nyc_2017"
+    layer_name: "land_cover"
+    description: "6-inch resolution 8-class land cover dataset"
+    file_format: "Erdas Imagine"
+    processing:
+      handler: "zip_folder"
+      validation_target: "NYC_2017_LiDAR_LandCover.img" # Main file INSIDE the folder
+    
+  road_network:
+    area_of_interest: "nyc"
+    time_period: "2025"
+    source_type: "local"
+    location: "data/bronze/vector/RoadLines"
+    layer_name: "road_network"
+    description: "LION single line street base map"
+    file_format: "File Geodatabase"
+    processing:
+      handler: "zip_folder"
+      validation_target: "lion.gdb"
+
+  city_boundaries:
+    area_of_interest: "nyc"
+    time_period: "2025"
+    source_type: "local"
+    location: "data/bronze/vector/nybb_25b"
+    source_id: "boundary_nyc_2025"
+    layer_name: "nyc_borough_boundary"
+    description: "New York City borough boundaries"
+    file_format: "Shapefile"
+    processing:
+      handler: "zip_folder"
+      validation_target: "nybb.shp"

@@ -16,7 +16,7 @@ supa_upload <- function(local_file_path, object_path) {
   #' @param object_path The destination path and file name in the bucket.
   
   # load project API securely
-  secrets <- yaml::read_yaml("config/secrets.yml")
+  secrets <- yaml::read_yaml("config/ingredients/secrets.yml")
   sb_url <- secrets$supabase$url
   sb_key <- secrets$supabase$service_role_key
   sb_bucket <- secrets$supabase$bucket_name

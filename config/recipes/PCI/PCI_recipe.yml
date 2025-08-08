@@ -1,0 +1,59 @@
+# filename: recipes/pci_advanced.yml
+# --------------------------------------------------------------------
+# SELF-CONTAINED RECIPE BLUEPRINT: Park Cooling Index (Advanced)
+#
+# This version is a complete reflection of the pilot study's data needs.
+# It includes all six original data sources and specifies the expected
+# file formats for each ingredient.
+# --------------------------------------------------------------------
+
+id: "pci_advanced"
+name: "Park Cooling Index (Advanced Pilot)"
+description: "A comprehensive recipe to calculate the cooling effect of urban parks, incorporating land surface temperature, vegetation, land cover, road networks, and boundaries."
+maintainer: "Rewilding Intelligence"
+
+ingredients:
+
+  - id: "land_surface_temp"
+    name: "Land Surface Temperature (LST)"
+    description: "Geospatial raster data representing median land surface temperature."
+    data_type: "raster"
+    # This new field specifies the expected file format for validation and handling.
+    expected_format: "GeoTIFF"
+    tags: ["temperature", "climate", "raster", "lst"]
+
+  - id: "ndvi"
+    name: "Normalized Difference Vegetation Index (NDVI)"
+    description: "Geospatial raster data representing the median density of green vegetation."
+    data_type: "raster"
+    expected_format: "GeoTIFF"
+    tags: ["vegetation", "greenness", "raster", "ndvi"]
+
+  - id: "land_cover"
+    name: "High-Resolution Land Cover"
+    description: "A high-resolution, multi-class land cover dataset."
+    data_type: "raster"
+    # A recipe can specify a list of acceptable formats.
+    expected_format: ["Erdas Imagine", "GeoTIFF"]
+    tags: ["land cover", "classification", "raster", "impervious"]
+
+  - id: "park_geometries"
+    name: "Park Geometries"
+    description: "Vector polygons representing the boundaries of parks and green spaces."
+    data_type: "vector"
+    expected_format: "Shapefile"
+    tags: ["parks", "boundaries", "vector", "polygons", "greenspace"]
+
+  - id: "road_network"
+    name: "Road Network Centerlines"
+    description: "A single-line vector dataset representing the street or road network."
+    data_type: "vector"
+    expected_format: "File Geodatabase"
+    tags: ["roads", "transportation", "network", "vector", "lines"]
+
+  - id: "city_boundaries"
+    name: "City Administrative Boundaries"
+    description: "A single vector polygon representing the outer boundary of the study area."
+    data_type: "vector"
+    expected_format: "Shapefile"
+    tags: ["boundary", "administrative", "vector", "polygons", "extent"]

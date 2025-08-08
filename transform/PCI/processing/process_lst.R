@@ -38,7 +38,7 @@ LANDSAT8_OFFSET <- 149.0
 #'                         input raster (e.g., "Median", "Mean"). This is used
 #'                         for naming the output layer. Defaults to "Median".
 #' @param target_unit A string indicating the desired output unit.
-#'                    Can be "Fahrenheit" (default) or "Celsius".
+#'                    Can be "Celsius" (default) or "Fahrenheit".
 #'
 #' @return A SpatRaster object from the 'terra' package containing the
 #'         processed, clipped, and masked LST data. The raster layer will be
@@ -53,24 +53,25 @@ LANDSAT8_OFFSET <- 149.0
 #'   median_tif_file <- "data/input/surfacetemperature_median_2020_2022.tif"
 #'   shp_file <- "data/input/nyc_boroughs/nybb.shp"
 #'
-#'   # Run the processing function
+#'   # Get Celsius (default)
+#'   nyc_lst_celsius <- process_lst(
+#'     raster_path = median_tif_file,
+#'     boundary_path = shp_file
+#'   )
+#'
+#'   # Get Fahrenheit
 #'   nyc_lst_fahrenheit <- process_lst(
 #'     raster_path = median_tif_file,
 #'     boundary_path = shp_file,
-#'     aggregation_type = "Median",
 #'     target_unit = "Fahrenheit"
 #'   )
-#'
-#'   # Inspect the result (layer name will be "LST_Median_Fahrenheit")
-#'   print(nyc_lst_fahrenheit)
 #' }
 process_lst <- function(raster_path,
                         boundary_path,
                         aggregation_type = "Median",
-                        target_unit = "Fahrenheit") {
+                        target_unit = "Celsius") {
   
   # --- 1. Input Validation ---
-  message(paste0("Starting processing for '", aggregation_type, "' LST data..."))
   if (!file.exists(raster_path)) {
     stop("Raster file not found at: ", raster_path)
   }
@@ -82,32 +83,30 @@ process_lst <- function(raster_path,
   }
   
   # --- 2. Load Data ---
-  message("--> Loading raw raster and boundary files...")
   lst_raw <- terra::rast(raster_path)
   boundary_sf <- sf::st_read(boundary_path, quiet = TRUE)
   
   # --- 3. Convert Temperature ---
-  message("--> Converting temperature to ", target_unit, "...")
-  # First, apply scale and offset to get temperature in Kelvin
+  # Apply scale and offset to get temperature in Kelvin
   lst_kelvin <- lst_raw * LANDSAT8_SCALE + LANDSAT8_OFFSET
   
-  # Then, convert to the target unit
+  # Convert from Kelvin to Celsius (base for both conversions)
+  lst_celsius <- lst_kelvin - 273.15
+  
+  # Convert to the target unit if necessary
   if (target_unit == "Fahrenheit") {
-    lst_celsius <- lst_kelvin - 273.15
     lst_final_temp <- lst_celsius * (9 / 5) + 32
   } else { # Celsius
-    lst_final_temp <- lst_kelvin - 273.15
+    lst_final_temp <- lst_celsius
   }
   
-  # Set the layer name for clarity based on inputs
+  # Set the layer name
   names(lst_final_temp) <- paste0("LST_", aggregation_type, "_", target_unit)
   
   # --- 4. Spatially Align and Clip Data ---
-  message("--> Aligning CRS and clipping raster to boundary...")
   boundary_proj <- sf::st_transform(boundary_sf, crs = terra::crs(lst_final_temp))
   lst_cropped <- terra::crop(lst_final_temp, boundary_proj)
   lst_processed <- terra::mask(lst_cropped, boundary_proj)
   
-  message("Processing complete!")
   return(lst_processed)
 }

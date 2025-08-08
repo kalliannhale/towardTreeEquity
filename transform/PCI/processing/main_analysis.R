@@ -5,12 +5,12 @@ pacman::p_load(httr2, terra, sf, ggplot2, tidyterra, here)
 
 
 # Source our updated, more flexible module
-source("ingest/urban parks/process_lst.R")
+source("transform/processing/process_lst.R")
 
 # --- 2. Define File Paths ---
 # Use the path to your MEDIAN temperature file
-raw_median_temp_file <- "data/bronze/surfacetemperature_median_2020_2022.tif"
-nyc_boundary_file <- "data/bronze/nybb_25b/nybb.shp"
+raw_median_temp_file <- "data/bronze/raster/surfacetemperature_median_2020_2022.tif"
+nyc_boundary_file <- "data/bronze/vector/nybb_25b/nybb.shp"
 
 # --- 3. Process the LST Data ---
 # Call the function, explicitly noting the aggregation type
