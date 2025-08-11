@@ -66,7 +66,7 @@ LANDSAT8_OFFSET <- 149.0
 #'     target_unit = "Fahrenheit"
 #'   )
 #' }
-process_lst <- function(raster_path,
+scale_lst <- function(raster_path,
                         boundary_path,
                         aggregation_type = "Median",
                         target_unit = "Celsius") {
@@ -100,13 +100,5 @@ process_lst <- function(raster_path,
     lst_final_temp <- lst_celsius
   }
   
-  # Set the layer name
-  names(lst_final_temp) <- paste0("LST_", aggregation_type, "_", target_unit)
-  
-  # --- 4. Spatially Align and Clip Data ---
-  boundary_proj <- sf::st_transform(boundary_sf, crs = terra::crs(lst_final_temp))
-  lst_cropped <- terra::crop(lst_final_temp, boundary_proj)
-  lst_processed <- terra::mask(lst_cropped, boundary_proj)
-  
-  return(lst_processed)
+  return(lst_final_temp)
 }

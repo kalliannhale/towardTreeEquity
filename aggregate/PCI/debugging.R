@@ -30,8 +30,8 @@ if (nrow(problem_parks) > 0) {
     # Add the park polygon
     geom_sf(data = park_geom, fill = "green", color = "darkgreen", alpha = 0.5) +
     debug
-    # Add the ring buffer polygon
-    geom_sf(data = ring_geom, fill = NA, color = "magenta", linewidth = 1.2) +
+  # Add the ring buffer polygon
+  geom_sf(data = ring_geom, fill = NA, color = "magenta", linewidth = 1.2) +
     
     # Use a good color scale for temperature
     scale_fill_viridis_c(name = "LST (°C)", na.value = "transparent") +

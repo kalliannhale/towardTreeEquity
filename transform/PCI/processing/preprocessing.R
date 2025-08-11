@@ -8,12 +8,14 @@
 
 pacman::p_load(httr2, terra, sf, dplyr, yaml, purrr, landscapemetrics, exactextractr)
 
+source("transform/PCI/processing/process_lst.R")
+
 # --- Load Data Paths from YAML Manifest ---
 manifest <- yaml::read_yaml("config/ingredients/PCI/nyc_pci_sources.yml")
 
 cat("--- Project manifest 'nyc_pci_sources.yml' read successfully. ---\n\n")
 
-# --- 1.3: Load All Raw Data Sources (Corrected Logic) ---
+# --- 1.3: Load All Raw Data Sources ---
 # We will now explicitly build the full path for any source that has a 'validation_target'.
 
 cat("--- Loading data sources specified in manifest... ---\n")
@@ -28,7 +30,7 @@ ndvi_path <- manifest$sources$ndvi$location
 ndvi_raster_raw <- terra::rast(ndvi_path)
 cat(" -> Loaded: NDVI\n")
 
-# Load Park Geometries (Vector Shapefile) - CORRECTED
+# Load Park Geometries (Vector Shapefile)
 # We build the full path using the location and the validation_target.
 parks_path <- file.path(
   manifest$sources$park_geometries$location,
@@ -38,13 +40,17 @@ parks_raw <- sf::st_read(parks_path)
 cat(" -> Loaded: Park Geometries\n")
 
 # Load Land Cover Raster (Erdas Imagine .img)
-# This was already correct, building the full path.
 land_cover_path <- file.path(
   manifest$sources$land_cover$location,
   manifest$sources$land_cover$processing$validation_target
 )
 land_cover_raster_raw <- terra::rast(land_cover_path)
 cat(" -> Loaded: Land Cover\n")
+
+# Load Nighttime Lights Raster (no validation_target needed)
+ntl_path <- manifest$sources$night_time_light$location
+ntl_raster_raw <- terra::rast(ntl_path)
+cat(" -> Loaded: Nighttime Lights\n")
 
 # Load Road Network (Vector File Geodatabase)
 # This was also correct, building the path to the .gdb.
@@ -68,7 +74,7 @@ cat("\n--- All raw data has been loaded into R. ---\n")
 
 
 # --- 1.4: Verification Step ---
-# Let's print a summary of each loaded object to make sure they look right.
+# print a summary of each loaded object to make sure they look right.
 
 cat("\n--- Verifying loaded data objects: ---\n")
 print("LST Raster:")
@@ -83,8 +89,7 @@ print("City Boundaries:")
 print(city_boundary_raw)
 
 #################################################################
-### BEAT 2: CRS, Unit Conversion, & Data Alignment (Final)
-### New strategy: Correctly reproject the cropping boundary for each raster.
+# BEAT 2: CRS, Unit Conversion, & Data Alignment
 #################################################################
 
 # --- 2.1: Define Target CRS ---
@@ -96,11 +101,13 @@ cat("--- Target CRS for the project defined as:", target_crs_string, "---\n\n")
 cat("--- Processing raw data layers... ---\n")
 
 # --- LST Raster (Source: WGS84 Degrees) ---
+
+lst_raster_raw <- scale_lst(lst_path, city_boundaries_path, "Median", "Celsius")
+
 # Create a cropping boundary IN THE SAME CRS as the LST raster (WGS84).
 cropping_extent_wgs84 <- sf::st_transform(parks_raw, crs = st_crs(lst_raster_raw))
 lst_raster_cropped <- terra::crop(lst_raster_raw, cropping_extent_wgs84)
 lst_raster_proj <- terra::project(lst_raster_cropped, target_crs_string)
-lst_raster <- lst_raster_proj - 273.15 # Convert to Celsius
 cat(" -> Processed: LST Raster\n")
 
 # --- NDVI Raster (Source: WGS84 Degrees) ---
@@ -108,6 +115,30 @@ cat(" -> Processed: LST Raster\n")
 ndvi_raster_cropped <- terra::crop(ndvi_raster_raw, cropping_extent_wgs84)
 ndvi_raster <- terra::project(ndvi_raster_cropped, target_crs_string)
 cat(" -> Processed: NDVI Raster\n")
+
+# --- Nighttime Lights Raster (Source: Assumed WGS84 from Google Earth Engine) ---
+# Check CRS and handle accordingly
+cat("NTL Raster CRS:", st_crs(ntl_raster_raw)$wkt, "\n")
+
+# If NTL is in WGS84 (common for GEE exports), use the WGS84 boundary
+if (st_crs(ntl_raster_raw) == st_crs("EPSG:4326")) {
+  ntl_raster_cropped <- terra::crop(ntl_raster_raw, cropping_extent_wgs84)
+  ntl_raster <- terra::project(ntl_raster_cropped, target_crs_string)
+  cat(" -> Processed: NTL Raster (from WGS84)\n")
+} else {
+  # If it's already in target CRS or another CRS, handle accordingly
+  cropping_extent_ntl <- sf::st_transform(parks_raw, crs = st_crs(ntl_raster_raw))
+  ntl_raster_cropped <- terra::crop(ntl_raster_raw, cropping_extent_ntl)
+  
+  # Check if projection is needed
+  if (st_crs(ntl_raster_raw) != st_crs(target_crs_string)) {
+    ntl_raster <- terra::project(ntl_raster_cropped, target_crs_string)
+    cat(" -> Processed: NTL Raster (reprojected)\n")
+  } else {
+    ntl_raster <- ntl_raster_cropped
+    cat(" -> Processed: NTL Raster (no reprojection needed)\n")
+  }
+}
 
 # --- Land Cover Raster (Source: NAD83 Feet) ---
 # Create a cropping boundary IN THE SAME CRS as the Land Cover raster (NAD83).
@@ -129,7 +160,7 @@ cat(" -> Processed: Park Geometries and City Boundaries\n")
 # Step A: Load the raw mixed-geometry layer from the geodatabase.
 roads_raw_mixed <- sf::st_read(roads_path, layer = "lion")
 
-# Step B: Filter to keep ONLY linestring features. CORRECTED SYNTAX
+# Step B: Filter to keep ONLY linestring features.
 roads_lines_only <- roads_raw_mixed %>%
   filter(st_is(st_geometry(.), c("LINESTRING", "MULTILINESTRING")))
 cat(paste(" -> Filtered road network: kept", nrow(roads_lines_only), "line features.\n"))
@@ -137,18 +168,18 @@ cat(paste(" -> Filtered road network: kept", nrow(roads_lines_only), "line featu
 # Step C: Reproject the line-only data to our target CRS.
 roads_proj <- sf::st_transform(roads_lines_only, crs = target_crs_string)
 
-# Step D: Repair any invalid line geometries. This will now succeed.
+# Step D: Repair any invalid line geometries.
 roads <- sf::st_make_valid(roads_proj)
 cat(" -> Repaired and processed: Road Network\n")
-
 
 # --- 2.4: Final Unified Crop ---
 cat("\n--- Cropping all layers to a final, unified study area... ---\n")
 final_boundary <- st_union(city_boundary)
 padded_boundary <- st_buffer(final_boundary, dist = 1000)
 
-lst_raster <- terra::crop(lst_raster, padded_boundary, snap="out")
+lst_raster <- terra::crop(lst_raster_proj, padded_boundary, snap="out")
 ndvi_raster <- terra::crop(ndvi_raster, padded_boundary, snap="out")
+ntl_raster <- terra::crop(ntl_raster, padded_boundary, snap="out")
 land_cover_raster <- terra::crop(land_cover_raster, padded_boundary, snap="out")
 parks <- sf::st_filter(parks, padded_boundary)
 roads <- sf::st_filter(roads, padded_boundary)
@@ -160,6 +191,7 @@ cat("--- Beat 2 is complete. ---\n")
 terra::writeRaster(land_cover_raster, "data/silver/PCI/land_cover_raster.tif", overwrite=TRUE)
 terra::writeRaster(lst_raster, "data/silver/PCI/lst_raster.tif", overwrite=TRUE) 
 terra::writeRaster(ndvi_raster, "data/silver/PCI/ndvi_raster.tif", overwrite=TRUE)
+terra::writeRaster(ntl_raster, "data/silver/PCI/ntl_raster.tif", overwrite=TRUE)
 
 # Save vector objects using sf::st_write()
 sf::st_write(parks, "data/silver/PCI/parks.gpkg", delete_dsn=TRUE)
